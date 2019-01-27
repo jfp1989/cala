@@ -22,11 +22,12 @@ class Person(db.Model):
         self.ideology = ideology
 
     def prettyPrint(self):
-        return "name: ", self.name, " surname: ", self.surname, " nickname: ", self.nickname
+        return "name: ", self.name, " surname: ", self.surname, " nickname: ", self.nickname, " ideology: ", self.ideology
     
 
 @app.route("/load")
 def load():
+    #some trial data
     person1 = Person("Chavo", "Tritones")
     person2 = Person("Sebastian", "Pose", "sebita", "Kishnerista")
     person3 = Person("Budy", "Andy", None ,"Peronista")
@@ -72,38 +73,45 @@ def getOnePerson(person_id):
         resp['ideology'] =  person.ideology
         return jsonify(resp), 200
     except:
-        return ""
+        return jsonify({'message' : 'Person id not found!'}), 404
 
 @app.route("/person/create", methods=['POST'])
 def createPerson():
-    #/person/create create new person in database. receives a json like =>  {"name" : "america","surname" : "latina", "nickname" : null, "ideology" : "troskista" }
+    #/person/create create new person in database. receives a json like => (body) {"name" : "america","surname" : "latina", "nickname" : null, "ideology" : "troskista" }
     try:
         json = request.get_json()
         newPerson = Person(json['name'], json['surname'], json['nickname'], json['ideology'])
         db.session.add(newPerson)
         db.session.commit()
-        return jsonify({'message' : 'New person created!'}), 200
+        return jsonify({'message' : 'New person has been created!'}), 200
     except:
         return ""
 
 @app.route("/person/edit/<person_id>", methods=['PUT'])
 def editPerson(person_id):
+    #/person/edit/<person_id> edit a person in database, receives a json like => (body)  {"name" : "america","surname" : "latina", "nickname" : null, "ideology" : "troskista" }
     try:
-        
-        return ""
+        person = Person.query.filter_by(id=person_id).first()
+        json = request.get_json()
+        person.name = json['name'] 
+        person.surname = json['surname'] 
+        person.nickname = json['nickname'] 
+        person.ideology = json['ideology'] 
+        db.session.commit()
+        return jsonify({'message' : 'Person has been modified!'}), 200
     except:
-        return ""
-    return ""
+        return jsonify({'message' : 'Person id not found!'}), 404
 
 @app.route("/person/delete/<person_id>", methods=['DELETE'])
 def deletePerson(person_id):
+    #/person/delete/<person_id> delete a person in database that matches the id passed by parameter
     try:
         person = Person.query.filter_by(id = person_id).first()
         db.session.delete(person)
         db.session.commit()
         return jsonify({'message': 'The person has been deleted!'}), 200
     except:
-        return ""
+        return jsonify({'message' : 'Person id not found!'}), 404
 
 if __name__ == '__main__':
     app.run(debug=True)
