@@ -1,2 +1,4 @@
-bs4
 flask
+pymysql
+MySQLdb
+mysqlclient
