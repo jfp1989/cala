@@ -14,16 +14,14 @@ class Person(db.Model):
     surname = db.Column(db.String(80), nullable=False)
     nickname = db.Column(db.String(80))
     ideology = db.Column(db.String(80))
+    ug = db.Column(db.Integer)
 
-    def __init__(self, name, surname, nickname=None, ideology=None):
+    def __init__(self, name, surname, nickname=None, ideology=None, ug=None):
         self.name = name
         self.surname = surname
         self.nickname = nickname
         self.ideology = ideology
-
-    def prettyPrint(self):
-        return "name: ", self.name, " surname: ", self.surname, " nickname: ", self.nickname, " ideology: ", self.ideology
-    
+        self.ug = ug
 
 @app.route("/load")
 def load():
@@ -31,13 +29,12 @@ def load():
     person1 = Person("Chavo", "Tritones")
     person2 = Person("Sebastian", "Pose", "sebita", "Kishnerista")
     person3 = Person("Budy", "Andy", None ,"Peronista")
+    person4 = Person("zeqe", "boris", None ,"macrista", 1)
     db.session.add(person1)
     db.session.add(person2)
     db.session.add(person3)
+    db.session.add(person4)
     db.session.commit()
-    print(person1.prettyPrint())
-    print(person2.prettyPrint())
-    print(person3.prettyPrint())
     return "fueron agregados"
 
 @app.route("/allPersons", methods=['GET'])
@@ -54,11 +51,12 @@ def getAllPersons():
             parcial['surname'] =  person.surname
             parcial['nickaname'] =  person.nickname
             parcial['ideology'] =  person.ideology
+            parcial['ug'] =  person.ug
             resp[i] = parcial
             i = i + 1
         return jsonify(resp), 200
     except:
-        return ""
+        return jsonify({'message' : 'bad request'}), 400
 
 @app.route("/person/<person_id>", methods=['GET'])
 def getOnePerson(person_id):
@@ -71,6 +69,7 @@ def getOnePerson(person_id):
         resp['surname'] =  person.surname
         resp['nickaname'] =  person.nickname
         resp['ideology'] =  person.ideology
+        resp['ug'] =  person.ug
         return jsonify(resp), 200
     except:
         return jsonify({'message' : 'Person id not found!'}), 404
@@ -80,12 +79,12 @@ def createPerson():
     #/person/create create new person in database. receives a json like => (body) {"name" : "america","surname" : "latina", "nickname" : null, "ideology" : "troskista" }
     try:
         json = request.get_json()
-        newPerson = Person(json['name'], json['surname'], json['nickname'], json['ideology'])
+        newPerson = Person(json['name'], json['surname'], json['nickname'], json['ideology'], json['ug'])
         db.session.add(newPerson)
         db.session.commit()
         return jsonify({'message' : 'New person has been created!'}), 200
     except:
-        return ""
+        return jsonify({'message' : 'bad request'}), 400
 
 @app.route("/person/edit/<person_id>", methods=['PUT'])
 def editPerson(person_id):
@@ -97,6 +96,7 @@ def editPerson(person_id):
         person.surname = json['surname'] 
         person.nickname = json['nickname'] 
         person.ideology = json['ideology'] 
+        person.ug = json['ug'] 
         db.session.commit()
         return jsonify({'message' : 'Person has been modified!'}), 200
     except:
