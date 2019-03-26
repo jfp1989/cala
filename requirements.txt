@@ -2,3 +2,5 @@ flask
 pymysql
 MySQLdb
 mysqlclient
+Flask-WTF
+Flask-Session
