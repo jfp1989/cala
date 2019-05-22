@@ -1,0 +1,51 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Flask",
+      "type": "python",
+      "request": "launch",
+      "stopOnEntry": false,
+      "pythonPath": "${config:python.pythonPath}",
+      "module": "flask",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "FLASK_APP": "app.py"
+      },
+      "args": [
+        "run",
+        "--no-debugger",
+        "--no-reload"
+      ]
+    },
+    
+    
+   {
+    "name": "Python: Flask",
+    "type": "python",
+    "request": "launch",
+    "module": "flask",
+    "env": {
+      "FLASK_APP": "kapp.py",
+      "OAUTH_CREDENTIALS": {"google_id":{"id":"953403062607-augdf3f9k5db9t0atrfc0rkid7r8k7ct.apps.googleusercontent.com","secret":"NUmudKwNE-rmiSzH_Q1__eQJ"}},
+      "FN_AUTH_REDIRECT_URI":"http://localhost:5000/google/auth",
+      "FN_BASE_URI":"http://localhost:5000",
+      "FN_CLIENT_ID":"953403062607-augdf3f9k5db9t0atrfc0rkid7r8k7ct.apps.googleusercontent.com",
+      "FN_CLIENT_SECRET":"NUmudKwNE-rmiSzH_Q1__eQJ",
+      "FLASK_DEBUG":"1",
+      "FN_FLASK_SECRET_KEY":"hgk6Cl1A9o9VCUGAxt",
+      "GOOGLE_LOGIN_CLIENT_ID":"953403062607-augdf3f9k5db9t0atrfc0rkid7r8k7ct.apps.googleusercontent.com",
+      "GOOGLE_LOGIN_CLIENT_SECRET":"NUmudKwNE-rmiSzH_Q1__eQJ",
+    },
+    "args": [
+      "run",
+      "--no-debugger",
+      "--no-reload"
+    ],
+    "jinja": true
+  }
+  ]
+}

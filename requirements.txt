@@ -1,6 +1,5 @@
+authlib
 flask
-pymysql
-MySQLdb
-mysqlclient
-Flask-WTF
-Flask-Session
+google-api-python-client
+google-auth
+virtualenv
